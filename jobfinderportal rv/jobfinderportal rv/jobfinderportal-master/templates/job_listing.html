@@ -1,0 +1,484 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Job board HTML-5 Template </title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="shortcut icon" type="image/x-icon" href="static/img/favicon.ico">
+
+        <!-- CSS here -->
+        <link rel="stylesheet" href="static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="static/css/flaticon.css">
+        <link rel="stylesheet" href="static/css/price_rangs.css">
+        <link rel="stylesheet" href="static/css/slicknav.css">
+        <link rel="stylesheet" href="static/css/animate.min.css">
+        <link rel="stylesheet" href="static/css/magnific-popup.css">
+        <link rel="stylesheet" href="static/css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="static/css/themify-icons.css">
+        <link rel="stylesheet" href="static/css/slick.css">
+        <link rel="stylesheet" href="static/css/nice-select.css">
+        <link rel="stylesheet" href="static/css/style.css">
+    </head>
+
+   <body>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="static/img/logo/logo.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader Start -->
+    <header>
+        <!-- Header Start -->
+<div class="header-area header-transparrent">
+    <div class="headder-top header-sticky">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-2">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/logo/logo.png') }}" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9">
+                    <div class="menu-wrapper">
+                        <!-- Main-menu -->
+                        <div class="main-menu">
+                            <nav class="d-none d-lg-block">
+                                <ul id="navigation">
+                                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                                    <li><a href="{{ url_for('job_listing') }}">Find a Jobs</a></li>
+                                    <li><a href="{{ url_for('about') }}">About</a></li>
+                                    <li><a href="#">Page</a>
+                                        <ul class="submenu">
+                                            <li><a href="{{ url_for('blog') }}">Blog</a></li>
+                                            <li><a href="{{ url_for('single_blog') }}">Blog Details</a></li>
+                                            <li><a href="{{ url_for('elements') }}">Elements</a></li>
+                                            <li><a href="{{ url_for('job_details') }}">Job Details</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- Header-btn -->
+                        <div class="header-btn d-none f-right d-lg-block">
+                            {% if current_user.is_authenticated %}
+                                <!-- Display logout button if user is authenticated -->
+                                <a href="{{ url_for('logout') }}" class="btn head-btn1">Logout</a>
+                            {% else %}
+                                <!-- Display register and login buttons if user is not authenticated -->
+                                <a href="{{ url_for('register') }}" class="btn head-btn1">Register</a>
+                                <a href="{{ url_for('login') }}" class="btn head-btn2">Login</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- Mobile Menu -->
+                <div class="col-12">
+                    <div class="mobile_menu d-block d-lg-none"></div>
+                    <!-- Mobile Menu Button -->
+                    <div class="mobile-menu-button d-block d-lg-none">
+                        <script>
+                            // Function to update the mobile menu button based on user authentication status
+                            function updateMobileMenuButton() {
+                                var mobileMenuButton = document.querySelector('.mobile-menu-button');
+
+                                // Check if the user is authenticated
+                                var isAuthenticated = {% if current_user.is_authenticated %}true{% else %}false{% endif %};
+
+                                // Update the button text and link based on authentication status
+                                if (isAuthenticated) {
+                                    mobileMenuButton.innerHTML = '<a href="{{ url_for('logout') }}" class="btn head-btn1">Logout</a>';
+                                } else {
+                                    mobileMenuButton.innerHTML = '<a href="{{ url_for('login') }}" class="btn head-btn2">Login</a>';
+                                }
+                            }
+
+                            // Call the function when the document is ready
+                            document.addEventListener('DOMContentLoaded', updateMobileMenuButton);
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+
+        <!-- Hero Area Start-->
+        <div class="slider-area ">
+            <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="static/img/hero/about.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>Get your job</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero Area End -->
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Job List Area Start -->
+<div class="job-list-container-box">
+    <!-- single-job-content -->
+    <section class="featured-job-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div id="job-list-container">
+                        {% for job in job_listings %}
+                        <div class="single-job-items mb-30">
+                            <div class="job-items">
+                                <div class="company-img">
+                                    <img src="{{ url_for('static', filename='img/logo/' + get_logo_filename(job.company_name)) }}"
+                                        alt="{{ job.company_name }} Logo">
+                                </div>
+                                <div class="job-tittle job-tittle2">
+                                    <h4>{{ job.job_title }}</h4>
+                                    <ul>
+                                        <li>{{ job.company_name }}</li>
+                                        <li><i class="fas fa-map-marker-alt"></i>{{ job.location }}</li>
+                                        <li>{{ job.salary }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="items-link items-link2 f-right">
+                                <a href="{{ url_for('application_form', job_id=job.id) }}">Apply</a>
+                                <span>{{ job.job_type }}</span>
+                                <span>{{ job.posted_date }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- single-job-content -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Featured_job_end -->
+
+    <!-- Add this script to handle logo preview -->
+    <style>
+        .job-list-container-box {
+            border: 2px solid #e0e5e8;
+            border-radius: 10px;
+            background-color: #f4f7fa;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
+        .single-job-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e5e8;
+            padding: 15px 0;
+        }
+
+        .job-items {
+            display: flex;
+            align-items: center;
+        }
+
+        .company-img {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .company-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .job-tittle {
+            flex-grow: 1;
+        }
+
+        .job-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .job-type,
+        .posted-date {
+            margin-left: 15px;
+            color: #6c757d;
+        }
+    </style>
+
+    <!-- Add this script to handle logo preview -->
+    <script>
+        function previewLogo(input, jobId) {
+            var logoPreview = document.getElementById('logo-preview-' + jobId);
+            var file = input.files[0];
+
+            console.log('File:', file);
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    console.log('Result:', e.target.result);
+                    logoPreview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                console.log('No file selected');
+                logoPreview.src = '{{ url_for('static', filename='img/logo/default_logo.png') }}'; // Set a default logo path
+            }
+        }
+
+        // Add this script for dynamic filtering
+        function updateJobList() {
+            var form = $('#filter-form');
+            var jobListContainer = $('#job-list-container');
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    jobListContainer.html(response);
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        // Attach the function to the change event of filter inputs
+        $('#filter-form input, #filter-form select').change(function () {
+            updateJobList();
+        });
+    </script>
+</div>
+<!-- Job List Area End -->
+
+<!--Pagination Start -->
+<div class="pagination-area pb-115 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="single-wrap d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><span class="ti-angle-right"></span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Pagination End -->
+        
+    </main>
+    <footer>
+        <!-- Footer Start-->
+        <div class="footer-area footer-bg footer-padding">
+            <div class="container">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                       <div class="single-footer-caption mb-50">
+                         <div class="single-footer-caption mb-30">
+                             <div class="footer-tittle">
+                                 <h4>About Us</h4>
+                                 <div class="footer-pera">
+                                     <p>Heaven frucvitful doesn't cover lesser dvsays appear creeping seasons so behold.</p>
+                                </div>
+                             </div>
+                         </div>
+
+                       </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Contact Info</h4>
+                                <ul>
+                                    <li>
+                                    <p>Address :Your address goes
+                                        here, your demo address.</p>
+                                    </li>
+                                    <li><a href="#">Phone : +8880 44338899</a></li>
+                                    <li><a href="#">Email : info@colorlib.com</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Important Link</h4>
+                                <ul>
+                                    <li><a href="#"> View Project</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Testimonial</a></li>
+                                    <li><a href="#">Proparties</a></li>
+                                    <li><a href="#">Support</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Newsletter</h4>
+                                <div class="footer-pera footer-pera2">
+                                 <p>Heaven fruitful doesn't over lesser in days. Appear creeping.</p>
+                             </div>
+                             <!-- Form -->
+                             <div class="footer-form" >
+                                 <div id="mc_embed_signup">
+                                     <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                                     method="get" class="subscribe_form relative mail_part">
+                                         <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
+                                         class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                         onblur="this.placeholder = ' Email Address '">
+                                         <div class="form-icon">
+                                             <button type="submit" name="submit" id="newsletter-submit"
+                                             class="email_icon newsletter-submit button-contactForm"><img src="static/img/icon/form.png" alt=""></button>
+                                         </div>
+                                         <div class="mt-10 info"></div>
+                                     </form>
+                                 </div>
+                             </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <!--  -->
+               <div class="row footer-wejed justify-content-between">
+                       <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                          <!-- logo -->
+                          <div class="footer-logo mb-20">
+                            <a href="index.html"><img src="static/img/logo/logo2_footer.png" alt=""></a>
+                          </div>
+                       </div>
+                       <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="footer-tittle-bottom">
+                            <span>5000+</span>
+                            <p>Talented Hunter</p>
+                        </div>
+                       </div>
+                       <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <div class="footer-tittle-bottom">
+                                <span>451</span>
+                                <p>Talented Hunter</p>
+                            </div>
+                       </div>
+                       <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <!-- Footer Bottom Tittle -->
+                            <div class="footer-tittle-bottom">
+                                <span>568</span>
+                                <p>Talented Hunter</p>
+                            </div>
+                       </div>
+               </div>
+            </div>
+        </div>
+        <!-- footer-bottom area -->
+        <div class="footer-bottom-area footer-bg">
+            <div class="container">
+                <div class="footer-border">
+                     <div class="row d-flex justify-content-between align-items-center">
+                         <div class="col-xl-10 col-lg-10 ">
+                             <div class="footer-copy-right">
+                                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                             </div>
+                         </div>
+                         <div class="col-xl-2 col-lg-2">
+                             <div class="footer-social f-right">
+                                 <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                 <a href="#"><i class="fab fa-twitter"></i></a>
+                                 <a href="#"><i class="fas fa-globe"></i></a>
+                                 <a href="#"><i class="fab fa-behance"></i></a>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End-->
+    </footer>
+
+	<!-- JS here -->
+	
+		<!-- All JS Custom Plugins Link Here here -->
+        <script src="./static/js/vendor/modernizr-3.5.0.min.js"></script>
+		<!-- Jquery, Popper, Bootstrap -->
+		<script src="./static/js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="./static/js/popper.min.js"></script>
+        <script src="./static/js/bootstrap.min.js"></script>
+	    <!-- Jquery Mobile Menu -->
+        <script src="./static/js/jquery.slicknav.min.js"></script>
+
+		<!-- Jquery Slick , Owl-Carousel Range -->
+        <script src="./static/js/owl.carousel.min.js"></script>
+        <script src="./static/js/slick.min.js"></script>
+        <script src="./static/js/price_rangs.js"></script>
+		<!-- One Page, Animated-HeadLin -->
+        <script src="./static/js/wow.min.js"></script>
+		<script src="./static/js/animated.headline.js"></script>
+        <script src="./static/js/jquery.magnific-popup.js"></script>
+
+		<!-- Scrollup, nice-select, sticky -->
+        <script src="./static/js/jquery.scrollUp.min.js"></script>
+        <script src="./static/js/jquery.nice-select.min.js"></script>
+		<script src="./static/js/jquery.sticky.js"></script>
+        
+        <!-- contact js -->
+        <script src="./static/js/contact.js"></script>
+        <script src="./static/js/jquery.form.js"></script>
+        <script src="./static/js/jquery.validate.min.js"></script>
+        <script src="./static/js/mail-script.js"></script>
+        <script src="./static/js/jquery.ajaxchimp.min.js"></script>
+        
+		<!-- Jquery Plugins, main Jquery -->	
+        <script src="./static/js/plugins.js"></script>
+        <script src="./static/js/main.js"></script>
+        
+    </body>
+</html>

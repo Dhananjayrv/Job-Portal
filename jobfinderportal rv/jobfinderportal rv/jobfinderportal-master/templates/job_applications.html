@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Applications - {{ job.job_title }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        td a {
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h2>Applications for {{ job.job_title }}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Applicant</th>
+                <th>Email</th>
+                <th>Resume</th>
+                <th>Cover Letter</th>
+                <th>LinkedIn Profile</th>
+                <th>Degree</th>
+                <th>School</th>
+                <th>Graduation Date</th>
+                <th>Previous Employer</th>
+                <th>Job Title</th>
+                <th>Skills</th>
+                <th>Reference Name</th>
+                <th>Reference Contact</th>
+                <th>Portfolio</th>
+                <!-- Add other fields as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in applications %}
+                <tr>
+                    <td>{{ application.user.username }}</td>
+                    <td>{{ application.user.email }}</td>
+                    <td>
+                        {% if application.resume_filename %}
+                        <a href="{{ url_for('download_resume', application_id=application.id) }}" download>
+                            Download Resume
+                        </a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ application.cover_letter | default('N/A') }}</td>
+                    <td>
+                        {% if application.linkedin_profile %}
+                            <a href="{{ application.linkedin_profile }}" target="_blank">
+                                LinkedIn Profile
+                            </a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ application.degree | default('N/A') }}</td>
+                    <td>{{ application.school | default('N/A') }}</td>
+                    <td>{{ application.graduation_date | default('N/A') }}</td>
+                    <td>{{ application.previous_employer | default('N/A') }}</td>
+                    <td>{{ application.job_title | default('N/A') }}</td>
+                    <td>{{ application.skills | default('N/A') }}</td>
+                    <td>{{ application.reference_name | default('N/A') }}</td>
+                    <td>{{ application.reference_contact | default('N/A') }}</td>
+                    <td>
+                        {{ application.portfolio | default('N/A') }}
+                        {% if application.portfolio %}
+                            {% set portfolio_url = application.portfolio %}
+                            <script>
+                                console.log("Portfolio URL:", "{{ portfolio_url }}");
+                            </script>
+                        {% endif %}
+                    </td>
+                    <!-- Add other fields as needed -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

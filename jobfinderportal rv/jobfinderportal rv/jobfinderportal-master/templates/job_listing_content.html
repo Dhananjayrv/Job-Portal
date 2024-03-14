@@ -1,0 +1,27 @@
+<!-- job_listing_content.html -->
+{% for job in job_listings %}
+    <div class="single-job-items mb-30">
+        <div class="job-items">
+            <div class="company-img">
+                {% if job.company_logo %}
+                    <img src="{{ url_for('static', filename='img/logo/' + job.company_logo) }}" alt="">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/logo/default_logo.png') }}" alt="">
+                {% endif %}
+            </div>
+            <div class="job-tittle job-tittle2">
+                <h4>{{ job.job_title }}</h4>
+                <ul>
+                    <li>{{ job.company_name }}</li>
+                    <li><i class="fas fa-map-marker-alt"></i>{{ job.location }}</li>
+                    <li>{{ job.salary }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="items-link items-link2 f-right">
+            <a href="{{ url_for('application_form', job_id=job.id) }}">Apply</a>
+            <span>{{ job.job_type }}</span>
+            <span>{{ job.posted_date }}</span>
+        </div>
+    </div>
+{% endfor %}
